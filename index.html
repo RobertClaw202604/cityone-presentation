@@ -1098,6 +1098,93 @@
     #navbar { padding: 0 16px; }
     .slide { padding: 60px 16px; }
   }
+
+  /* ── ANIMÁCIÓK ─────────────────────────────────── */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeInLeft {
+    from { opacity: 0; transform: translateX(-24px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes scaleIn {
+    from { opacity: 0; transform: scale(0.92); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+  @keyframes slideInRight {
+    from { opacity: 0; transform: translateX(32px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes countUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .animate-fade { opacity: 0; }
+  .animate-fade.visible { animation: fadeInUp 0.6s ease forwards; }
+  .animate-left { opacity: 0; }
+  .animate-left.visible { animation: fadeInLeft 0.5s ease forwards; }
+  .animate-scale { opacity: 0; }
+  .animate-scale.visible { animation: scaleIn 0.5s ease forwards; }
+  .animate-right { opacity: 0; }
+  .animate-right.visible { animation: slideInRight 0.5s ease forwards; }
+
+  .delay-1 { animation-delay: 0.1s !important; }
+  .delay-2 { animation-delay: 0.25s !important; }
+  .delay-3 { animation-delay: 0.4s !important; }
+  .delay-4 { animation-delay: 0.55s !important; }
+  .delay-5 { animation-delay: 0.7s !important; }
+
+  /* ── IKON HELYETTESÍTŐK (emoji kiváltó) ─────────── */
+  .icon-block {
+    width: 44px; height: 44px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; flex-shrink: 0;
+    background: rgba(232,83,10,0.15);
+    border: 1px solid rgba(232,83,10,0.25);
+    color: var(--orange);
+    font-weight: 800;
+    margin-bottom: 10px;
+  }
+  .icon-block.navy { background: rgba(26,35,50,0.12); border-color: rgba(26,35,50,0.2); color: var(--navy); }
+  .icon-block.green { background: rgba(34,166,99,0.12); border-color: rgba(34,166,99,0.25); color: var(--green); }
+  .icon-block.red { background: rgba(229,62,62,0.1); border-color: rgba(229,62,62,0.2); color: var(--red); }
+
+  /* ── OLVASHATÓSÁG JAVÍTÁS ─────────────────────── */
+  .slide-light .card-light p,
+  .slide-light .card-light h3,
+  .slide-light .card-light li,
+  .slide-gray .card-light p,
+  .slide-gray .card-light h3,
+  .slide-gray .card-light li { color: var(--text-dark) !important; }
+
+  .slide-light p, .slide-light li,
+  .slide-gray p, .slide-gray li { color: var(--text-dark); }
+
+  .slide-light .muted, .slide-gray .muted { color: var(--text-mid) !important; }
+
+  .myth-card p { color: var(--text-mid) !important; }
+  .change-box p, .change-box li { color: var(--text-dark) !important; }
+  .bp-filter { color: var(--text-dark) !important; }
+  .bp-filter strong { color: var(--orange) !important; }
+
+  .matrix-cell { color: var(--text-dark) !important; }
+
+  /* ── HERO PULSE ─────────────────────────────── */
+  @keyframes pulse-ring {
+    0% { box-shadow: 0 0 0 0 rgba(232,83,10,0.4); }
+    70% { box-shadow: 0 0 0 20px rgba(232,83,10,0); }
+    100% { box-shadow: 0 0 0 0 rgba(232,83,10,0); }
+  }
+  .hero-cta-btn {
+    animation: pulse-ring 2.5s infinite;
+    border-radius: 8px;
+  }
+  .stat-box { transition: transform 0.2s; }
+  .stat-box:hover { transform: translateY(-3px); }
+  .card:hover, .card-light:hover { transform: translateY(-2px); transition: transform 0.2s; }
+
 </style>
 </head>
 <body>
@@ -2026,6 +2113,49 @@
       navigate(diff > 0 ? 1 : -1);
     }
   }, { passive: true });
+
+  // Intersection Observer pentru animații
+  const animEls = document.querySelectorAll('.animate-fade, .animate-left, .animate-scale, .animate-right');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.15 });
+  animEls.forEach(el => io.observe(el));
+
+  // Adaug clase animate la carduri
+  document.querySelectorAll('.slide-inner .card, .slide-inner .card-light, .slide-inner .myth-card').forEach((el, i) => {
+    el.classList.add('animate-fade');
+    el.style.animationDelay = (0.1 + i * 0.12) + 's';
+  });
+  document.querySelectorAll('.slide-inner .stat-box').forEach((el, i) => {
+    el.classList.add('animate-scale');
+    el.style.animationDelay = (0.2 + i * 0.15) + 's';
+  });
+  document.querySelectorAll('.slide-inner .tl-item').forEach((el, i) => {
+    el.classList.add('animate-left');
+    el.style.animationDelay = (0.1 + i * 0.18) + 's';
+  });
+  document.querySelectorAll('.slide-inner .pyramid-layer').forEach((el, i) => {
+    el.classList.add('animate-scale');
+    el.style.animationDelay = (0.1 + i * 0.2) + 's';
+  });
+  document.querySelectorAll('.slide-inner h2.slide-title, .slide-inner h2.hero-title').forEach(el => {
+    el.classList.add('animate-fade');
+  });
+  document.querySelectorAll('.slide-inner .bp-filter').forEach(el => {
+    el.classList.add('animate-fade');
+    el.style.animationDelay = '0.5s';
+  });
+  document.querySelectorAll('.slide-inner .quote-box').forEach(el => {
+    el.classList.add('animate-right');
+    el.style.animationDelay = '0.3s';
+  });
+  // Re-observe new elements
+  document.querySelectorAll('.animate-fade, .animate-left, .animate-scale, .animate-right').forEach(el => io.observe(el));
+
 </script>
 </body>
 </html>
