@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Urban Logistics 2035 — CityOne Logistics Parks</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1a2332;
+    --navy2: #232f42;
+    --orange: #E8530A;
+    --orange-light: #ff6b1a;
+    --white: #ffffff;
+    --gray: #f4f5f7;
+    --gray2: #e8eaed;
+    --text: #1a2332;
+    --muted: #6b7280;
+    --green: #16a34a;
+    --amber: #d97706;
+    --red: #dc2626;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', sans-serif; background: #0f1520; }
+
+  /* NAV */
+  #nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(15,21,32,0.95); backdrop-filter: blur(8px);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 28px; border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  #nav .brand { color: var(--orange); font-weight: 700; font-size: 14px; letter-spacing: 1px; text-transform: uppercase; }
+  #nav .controls { display: flex; align-items: center; gap: 16px; }
+  #nav .counter { color: rgba(255,255,255,0.5); font-size: 13px; font-weight: 500; }
+  #nav button {
+    background: rgba(232,83,10,0.15); border: 1px solid rgba(232,83,10,0.3);
+    color: var(--orange); width: 32px; height: 32px; border-radius: 6px;
+    cursor: pointer; font-size: 14px; transition: all .2s;
+  }
+  #nav button:hover { background: var(--orange); color: white; }
+
+  /* SLIDES */
+  .slide {
+    min-height: 100vh; width: 100%; display: flex; flex-direction: column;
+    justify-content: center; align-items: center; padding: 80px 24px 60px;
+    position: relative; scroll-margin-top: 56px;
+  }
+  .slide-inner { width: 100%; max-width: 920px; }
+
+  /* FOOTER */
+  .slide-footer {
+    position: absolute; bottom: 18px; left: 0; right: 0;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0 32px; font-size: 11px; opacity: 0.4;
+  }
+
+  /* DARK SLIDES */
+  .slide-dark { background: var(--navy); color: white; }
+  .slide-dark .slide-footer { color: white; }
+  .slide-dark2 { background: linear-gradient(135deg, #1a2332 0%, #0f1a2e 100%); color: white; }
+  .slide-dark2 .slide-footer { color: white; }
+
+  /* LIGHT SLIDES */
+  .slide-light { background: var(--white); color: var(--text); }
+  .slide-light .slide-footer { color: var(--text); }
+  .slide-gray { background: var(--gray); color: var(--text); }
+  .slide-gray .slide-footer { color: var(--text); }
+
+  /* TYPOGRAPHY */
+  .label {
+    font-size: 11px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase;
+    color: var(--orange); margin-bottom: 12px;
+  }
+  .slide-dark .label, .slide-dark2 .label { color: var(--orange); }
+  h1.hero { font-family: 'Playfair Display', serif; font-size: clamp(36px, 5vw, 64px); line-height: 1.15; }
+  h2.slide-title { font-family: 'Playfair Display', serif; font-size: clamp(26px, 3.5vw, 44px); line-height: 1.2; margin-bottom: 28px; }
+  h3.section-title { font-size: 20px; font-weight: 700; margin-bottom: 12px; }
+  p.lead { font-size: 17px; line-height: 1.75; color: inherit; opacity: 0.85; }
+  .orange { color: var(--orange); }
+  .white { color: white; }
+  .muted { opacity: 0.6; }
+
+  /* DIVIDER */
+  .divider { width: 60px; height: 3px; background: var(--orange); margin: 20px 0; border-radius: 2px; }
+
+  /* CARDS */
+  .card-grid { display: grid; gap: 16px; }
+  .card-grid-2 { grid-template-columns: 1fr 1fr; }
+  .card-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .card {
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px; padding: 20px;
+  }
+  .card-light {
+    background: white; border: 1px solid var(--gray2); border-radius: 12px; padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .card-orange { border-left: 4px solid var(--orange); }
+  .card-num {
+    width: 36px; height: 36px; background: var(--orange); color: white;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 16px; margin-bottom: 12px;
+  }
+  .card-icon { font-size: 32px; margin-bottom: 12px; }
+
+  /* MYTH CARD */
+  .myth-card {
+    background: white; border-radius: 12px; padding: 24px;
+    border-top: 4px solid var(--red); box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  }
+  .myth-label { font-size: 11px; font-weight: 700; color: var(--red); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+  .myth-truth { font-size: 12px; color: var(--green); font-weight: 600; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--gray2); }
+
+  /* PYRAMID */
+  .pyramid { display: flex; flex-direction: column; align-items: center; gap: 8px; margin: 24px 0; }
+  .pyramid-layer {
+    border-radius: 8px; padding: 14px 28px; text-align: center; font-weight: 600;
+    display: flex; flex-direction: column; align-items: center; transition: all .2s;
+  }
+  .pyramid-layer span { font-size: 12px; font-weight: 400; opacity: 0.75; margin-top: 2px; }
+
+  /* STAT BOX */
+  .stat-box {
+    background: rgba(232,83,10,0.1); border: 1px solid rgba(232,83,10,0.25);
+    border-radius: 12px; padding: 20px 24px; text-align: center;
+  }
+  .stat-num { font-size: 42px; font-weight: 800; color: var(--orange); line-height: 1; }
+  .stat-label { font-size: 13px; opacity: 0.7; margin-top: 6px; }
+
+  /* TRAFFIC LIGHT MATRIX */
+  .matrix { border-radius: 12px; overflow: hidden; border: 1px solid var(--gray2); }
+  .matrix-header {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    background: var(--navy);
+  }
+  .matrix-header div { padding: 12px 16px; font-size: 12px; font-weight: 700; color: white; text-align: center; }
+  .matrix-row { display: grid; grid-template-columns: 1fr 1fr 1fr; border-top: 1px solid var(--gray2); }
+  .matrix-cell { padding: 10px 14px; font-size: 13px; line-height: 1.4; }
+  .cell-green { background: #f0fdf4; border-left: 3px solid var(--green); }
+  .cell-amber { background: #fffbeb; border-left: 3px solid var(--amber); }
+  .cell-red { background: #fef2f2; border-left: 3px solid var(--red); }
+  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+  .dot-green { background: var(--green); }
+  .dot-amber { background: var(--amber); }
+  .dot-red { background: var(--red); }
+
+  /* STRIKETHROUGH LIST */
+  .strike-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .strike-list li {
+    padding: 12px 16px; background: rgba(255,255,255,0.05); border-radius: 8px;
+    font-size: 15px; text-decoration: line-through; opacity: 0.5;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  /* BULLET LIST */
+  .bullet-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .bullet-list li { display: flex; align-items: flex-start; gap: 12px; font-size: 15px; line-height: 1.55; }
+  .bullet-list li::before {
+    content: ''; flex-shrink: 0; width: 6px; height: 6px;
+    border-radius: 50%; background: var(--orange); margin-top: 8px;
+  }
+
+  /* QUOTE BOX */
+  .quote-box {
+    background: rgba(232,83,10,0.08); border-left: 4px solid var(--orange);
+    border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 16px 0;
+    font-size: 14px; font-style: italic; line-height: 1.6;
+  }
+  .quote-source { font-size: 11px; font-style: normal; font-weight: 700; color: var(--orange); margin-top: 6px; }
+
+  /* BUDAPEST FILTER */
+  .bp-filter {
+    background: rgba(232,83,10,0.1); border: 1px solid rgba(232,83,10,0.2);
+    border-radius: 8px; padding: 12px 16px; margin-top: 16px; font-size: 13px;
+  }
+  .bp-filter strong { color: var(--orange); }
+
+  /* TWO COLUMN */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+  /* CHANGE BOX */
+  .change-box { border-radius: 10px; padding: 18px; }
+  .change-changes { background: rgba(220,38,38,0.08); border: 1px solid rgba(220,38,38,0.2); }
+  .change-stays { background: rgba(22,163,74,0.08); border: 1px solid rgba(22,163,74,0.2); }
+
+  /* HERO SLIDE */
+  .hero-bg {
+    background: linear-gradient(135deg, #0f1520 0%, #1a2d4a 50%, #1a2332 100%);
+  }
+  .hero-tag {
+    display: inline-block; background: rgba(232,83,10,0.15); border: 1px solid rgba(232,83,10,0.3);
+    color: var(--orange); font-size: 12px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; padding: 6px 14px; border-radius: 20px; margin-bottom: 24px;
+  }
+  .hero-sub { font-size: 18px; line-height: 1.7; opacity: 0.7; margin-top: 20px; max-width: 650px; }
+
+  /* TIMELINE */
+  .timeline { display: flex; flex-direction: column; gap: 0; }
+  .tl-item { display: flex; gap: 20px; padding-bottom: 20px; position: relative; }
+  .tl-item:not(:last-child)::before {
+    content: ''; position: absolute; left: 14px; top: 32px; bottom: 0;
+    width: 2px; background: rgba(232,83,10,0.2);
+  }
+  .tl-dot {
+    flex-shrink: 0; width: 30px; height: 30px; border-radius: 50%;
+    background: var(--orange); display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 700; font-size: 13px; z-index: 1;
+  }
+  .tl-content h4 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+  .tl-content p { font-size: 13px; opacity: 0.7; line-height: 1.5; }
+
+  /* RESPONSIVE */
+  @media (max-width: 700px) {
+    .card-grid-2, .card-grid-3, .two-col, .three-col { grid-template-columns: 1fr; }
+    .matrix-header, .matrix-row { grid-template-columns: 1fr; }
+  }
+
+  /* PRINT */
+  @media print {
+    #nav { display: none; }
+    .slide { min-height: 100vh; page-break-after: always; padding: 40px; }
+    .slide-footer { position: relative; margin-top: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<div id="nav">
+  <div class="brand">CityOne · Urban Logistics 2035</div>
+  <div class="controls">
+    <span class="counter" id="counter">1 / 18</span>
+    <button onclick="prevSlide()">←</button>
+    <button onclick="nextSlide()">→</button>
+  </div>
+</div>
+
+<!-- SLIDE 1 — HERO -->
+<div class="slide hero-bg" id="s1">
+  <div class="slide-inner">
+    <div class="hero-tag">Belső csapatépítő prezentáció — 2026</div>
+    <div class="label">CityOne Logistics Parks</div>
+    <h1 class="hero white">Urban Logistics<br><span class="orange">2035</span></h1>
+    <div class="divider"></div>
+    <p class="hero-sub white">Mit mondanak a vezető kutatóházak az urban / inner-ring logistics következő 10 évéről?</p>
+    <div style="margin-top:40px;display:flex;gap:32px;flex-wrap:wrap;">
+      <div class="stat-box"><div class="stat-num">3</div><div class="stat-label white">Logisztikai park</div></div>
+      <div class="stat-box"><div class="stat-num">45k</div><div class="stat-label white">m² portfólió</div></div>
+      <div class="stat-box"><div class="stat-num">22%</div><div class="stat-label white">Prémium piaci részesedés</div></div>
+    </div>
+  </div>
+  <div class="slide-footer white">
+    <span>CityOne Logistics Parks — Urban Logistics 2035</span><span>1 / 18</span>
+  </div>
+</div>
+
+<!-- SLIDE 2 — CÉL -->
+<div class="slide slide-light" id="s2">
+  <div class="slide-inner">
+    <div class="label">A prezentáció célja</div>
+    <h2 class="slide-title">Milyen urban logistics parkokra lesz tartós bérlői kereslet 2035-ben?</h2>
+    <div class="divider"></div>
+    <p class="lead" style="margin-bottom:28px;">Nem technológiai jóslatot készítünk, hanem a kutatóházi konszenzust értelmezzük <strong>Budapest szempontjából.</strong></p>
+    <div class="card-grid card-grid-2" style="margin-top:8px;">
+      <div class="card-light card-orange"><div class="card-icon">📈</div><h3 class="section-title">Mi nő biztosan</h3><p style="font-size:14px;color:var(--muted);">Erős kutatói konszenzussal alátámasztott trendek</p></div>
+      <div class="card-light" style="border-left:4px solid var(--amber)"><div class="card-icon">⚖️</div><h3 class="section-title">Mi szabályozásfüggő</h3><p style="font-size:14px;color:var(--muted);">Feltételes trendek, ahol a döntés még nyitott</p></div>
+      <div class="card-light" style="border-left:4px solid var(--muted)"><div class="card-icon">🗺️</div><h3 class="section-title">Mi Budapest-specifikus</h3><p style="font-size:14px;color:var(--muted);">Ahol a helyi piac eltér a globális trendektől</p></div>
+      <div class="card-light" style="border-left:4px solid var(--navy)"><div class="card-icon">🏢</div><h3 class="section-title">Ingatlanpiaci következtetések</h3><p style="font-size:14px;color:var(--muted);">Mit jelent ez a CityOne stratégiája szempontjából</p></div>
+    </div>
+  </div>
+  <div class="slide-footer"><span>CityOne Logistics Parks — Urban Logistics 2035</span><span>2 / 18</span></div>
+</div>
+
+<!-- SLIDE 3 — DEFINÍCIÓ -->
+<div class="slide slide-dark" id="s3">
+  <div class="slide-inner">
+    <div class="label">Definíció</div>
+    <h2 class="slide-title white">Hol van a CityOne helye?</h2>
+    <div class="divider"></div>
+    <div class="pyramid">
+      <div class="pyramid-layer" style="width:320px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);">
+        <strong style="color:white;font-size:15px;">Regionális logisztika</strong>
+        <span style="color:rgba(255,255,255,0.6);">Nagy alapterület · Autópálya-orientált · Országos ellátás</span>
+      </div>
+      <div style="text-align:center;color:var(--orange);font-size:20px;">▼</div>
+      <div class="pyramid-layer" style="width:420px;background:rgba(232,83,10,0.2);border:2px solid var(--orange);">
+        <div style="display:flex;align-items:center;gap:8px;justify-content:center;">
+          <span style="font-size:18px;">📍</span>
+          <strong style="color:white;font-size:16px;">Urban / inner-ring logistics</strong>
+          <span style="background:var(--orange);color:white;font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px;">CITYONE</span>
+        </div>
+        <span style="color:rgba(255,255,255,0.7);">Városon belüli · Regionális ↔ Városi disztribúció összekötő</span>
+      </div>
+      <div style="text-align:center;color:var(--orange);font-size:20px;">▼</div>
+      <div class="pyramid-layer" style="width:260px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);">
+        <strong style="color:rgba(255,255,255,0.7);font-size:14px;">Microhub</strong>
+        <span style="color:rgba(255,255,255,0.45);">Kis méretű · Végelosztás · Nagyon sűrű zónák</span>
+      </div>
+    </div>
+    <div class="bp-filter" style="margin-top:8px;">
+      <strong>🎯 CityOne pozíciója:</strong> Az urban / inner-ring rétegben — a regionális és a végső elosztás közötti stratégiai híd.
+    </div>
+  </div>
+  <div class="slide-footer white"><span>CityOne Logistics Parks — Urban Logistics 2035</span><span>3 / 18</span></div>
+</div>
+
+<!-- SLIDE 4 — TÉVHITEK -->
+<div class="slide slide-gray" id="s4">
+  <div class="slide-inner">
+    <div class="label">Miben tévedett a piac?</div>
+    <h2 class="slide-title">Három leegyszerűsítés, amit a kutatások árnyalnak</h2>
+    <div class="divider"></div>
+    <div class="card-grid card-grid-3">
+      <div class="myth-card">
+        <div class="myth-label">❌ Tévhit #1</div>
+        <h3 class="section-title" style="font-size:15px;">"A technológia csökkenti a lokáció jelentőségét."</h3>
+        <p style="font-size:13px;color:var(--muted);line-height:1.6;">Az AI és a digitalizáció javítja a működést, de nem szünteti meg a fizikai távolságot.</p>
+        <div class="myth-truth">✓ Valójában: A lokáció értéke fennmarad — az AI csak hatékonyabbá teszi a jó lokációt.</div>
+      </div>
+      <div class="myth-card">
+        <div class="myth-label">❌ Tévhit #2</div>
+        <h3 class="section-title" style="font-size:15px;">"A nagy regionális parkok megoldják a városi logisztikát."</h3>
+        <p style="font-size:13px;color:var(--muted);line-height:1.6;">A regionális park hatékony nagy volumenre, de a városi kiszolgálás külön logisztikai réteget igényel.</p>
+        <div class="myth-truth">✓ Valójában: A két réteg egymást egészíti ki, nem helyettesíti.</div>
+      </div>
+      <div class="myth-card">
+        <div class="myth-label">❌ Tévhit #3</div>
+        <h3 class="section-title" style="font-size:15px;">"A jövő nyertese a legtechnológiaibb épület."</h3>
+        <p style="font-size:13px;color:var(--muted);line-height:1.6;">A technológia fontos, de a kutatások legerősebb üzenete: lokáció, kínálati szűkösség és urban access.</p>
+        <div class="myth-truth">✓ Valójában: Technológia + prémium lokáció = igazi versenyelőny.</div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span>CityOne Logistics Parks — Urban Logistics 2035</span><span>4 / 18</span></div>
+</div>
+
+<!-- SLIDE 5 — KONSZENZUS -->
+<div class="slide slide-dark2" id="s5">
+  <div class="slide-inner">
+    <div class="label">A legerősebb kutatói konszenzus</div>
+    <h2 class="slide-title white">A kereslet nő, de a kínálat lesz a szűk keresztmetszet</h2>
+    <div class="divider"></div>
+    <div class="two-col">
+      <div>
+        <div style="display:flex;gap:20px;margin-bottom:20px;">
+          <div class="stat-box" style="flex:1"><div class="stat-num">📈</div><div class="stat-label white" style="color:rgba(255,255,255,0.6)">Kereslet</div></div>
+          <div style="font-size:32px;display:flex;align-items:center;color:var(--orange)">→</div>
+          <div class="stat-box" style="flex:1;border-color:rgba(220,38,38,0.4);background:rgba(220,38,38,0.1)"><div class="stat-num" style="color:#f87171">⚠️</div><div class="stat-label white" style="color:rgba(255,255,255,0.6)">Kínálat szűkös</div></div>
+        </div>
+        <div class="quote-box">
+          Prologis a növekvő kínálati korlátokat — szabályozás, infrastruktúra, fejlesztési akadályok — nevezi meg az európai logisztikai piac egyik fő értékteremtő tényezőjeként.
+          <div class="quote-source">Prologis Research</div>
+        </div>
+      </div>
+      <div>
+        <ul class="bullet-list" style="color:rgba(255,255,255,0.85)">
+          <li>Az urban / infill logistics jelentősége erősödik</li>
+          <li>Új városi logisztikai fejlesztések létrehozása egyre nehezebb</li>
+          <li>Szabályozási, infrastrukturális és fejlesztési akadályok nőnek</li>
+          <li>A meglévő, jó lokációjú eszközök értéke nő</li>
+        </ul>
+        <div class="bp-filter" style="margin-top:20px;">
+          <strong>🇭🇺 Budapest-szűrő:</strong> Erősen releváns. A jó városon belüli logisztikai lokáció nem korlátlanul újratermelhető.
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer white"><span>CityOne Logistics Parks — Urban Logistics 2035</span><span>5 / 18</span></div>
+</div>
+
+<!-- SLIDE 6 — KERESLET -->
+<div class="slide slide-light" id="s6">
+  <div class="slide-inner">
+    <div class="label">Mi hajtja a keresletet?</div>
+    <h2 class="slide-title">Nem egyetlen tényező, hanem több egymást erősítő folyamat</h2>
+    <div class="divider"></div>
+    <div class="two-col">
+      <ul class="bullet-list">
+        <li>E-commerce és városi kiszolgálási igények növekedése</li>
+        <li>Bérlői elvárás a gyorsabb és megbízhatóbb városi elérésre</li>
+        <li>Szolgáltatási szint emelkedése (same-day, next-hour)</li>
+        <li>Városi disztribúció és last-mile működés fontossága</li>
+      </ul>
+      <div>
+        <div class="quote-box">
+          A last-mile városi működésben a térhiány, a szabályozás, a sűrű városi útvonalak és a kiszolgálási komplexitás egyszerre jelentenek kihívást.
+          <div class="quote-source">JLL Research</div>
+        </div>
+        <div class="bp-filter">
+          <strong>🇭🇺 Budapest-szűrő:</strong> Releváns, de nem automatikusan microhub-logika. Inkább az urban / inner-ring lokációk jelentősége nőhet.
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span>CityOne Logistics Parks — Urban Logistics 2035</span><span>6 / 18</span></div>
+</div>
+
+<!-- SLIDE 7 — SZŰKÖSSÉG -->
+<div class="slide slide-gray" id="s7">
+  <div class="slide-inner">
+    <div class="label">Miért marad szűkös a jó lokáció?</div>
+    <h2 class="slide-title">A városi területért egyre több funkció versenyez</h2>
+    <div class="divider"></div>
+    <div class="card-grid card-grid-3" style="margin-bottom:20px;">
+      <div class="card-light"><div class="card-icon">🏙️</div><p style="font-size:14px;font-weight:600;">Kevés fejleszthető városi terület</p></div>
+      <div class="card-light"><div class="card-icon">🏘️</div><p style="font-size:14px;font-weight:600;">Lakó- és vegyes funkciós fejlesztési nyomás</p></div>
+      <div class="card-light"><div class="card-icon">📋</div><p style="font-size:14px;font-weight:600;">Engedélyezési és szabályozási korlátok</p></div>
+      <div class="card-light"><div class="card-icon">⚡</div><p style="font-size:14px;font-weight:600;">Infrastruktúra-korlátok</p></div>
+      <div class="card-light"><div class="card-icon">🔄</div><p style="font-size:14px;font-weight:600;">Korábbi ipari területek alternatív hasznosítása</p></div>
+      <div class="card-light" style="background:rgba(232,83,10,0.06);border-color:rgba(232,83,10,0.2)"><div class="card-icon">📊</div><p style="font-size:14px;font-weight:600;color:var(--orange)">Fejlesztési pipeline visszafogott</p></div>
+    </div>
+    <div class="bp-filter">
+      <strong>🇭🇺 Budapest-szűrő:</strong> Különösen fontos kérdés, hogy a korábbi ipari területeket milyen mértékben váltják ki lakó- és vegyes projektek.
+    </div>
+  </div>
+  <div class="slide-footer"><span>CityOne Logistics Parks — Urban Logistics 2035</span><span>7 / 18</span></div>
+</div>
+
+<!-- SLIDE 8 — VÁROSOK -->
+<div class="slide slide-dark" id="s8">
+  <div class="slide-inner">
+    <div class="label">Mit várnak a városok?</div>
+    <h2 class="slide-title white">Nem kevesebb logisztikát, hanem <span class="orange">kezelhetőbb logisztikát</span></h2>
+    <div class="divider"></div>
+    <div class="card-grid card-grid-2">
+      <div>
+        <ul class="bullet-list" style="color:rgba(255,255,255,0.85)">
+          <li>Alacsonyabb emisszió a városi forgalomban</li>
+          <li>Kevesebb felesleges járműkilométer</li>
+          <li>Jobban menedzselt áruszállítás</li>
+          <li>Tisztább és szabályozottabb működés</li>
+          <li>Élhetőbb városi környezet</li>
+        </ul>
+      </div>
+      <div>
+        <div class="quote-box">
+          A városi logisztikai hubok célja a városi áruszállítás hatékonyabb és fenntarthatóbb szervezése.
+          <div class="quote-source">OECD/ITF Urban Logistics Hub Research</div>
+        </div>
+        <div class="bp-filter">
+          <strong>🇭🇺 Budapest-szűrő:</strong> A trend iránya nemzetközileg erős, de Budapesten az ütem a szabályozási döntésektől függ.
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer white"><span>CityOne Logistics Parks — Urban Logistics 2035</span><span>8 / 18</span></div>
+</div>
+
+<!-- SLIDE 9 — BUDAPEST VÁROSSZERKEZET -->
+<div class="slide slide-light" id="s9">
+  <div class="slide-inner">
+    <div class="label">Városszerkezet: a budapesti kulcskérdés</div>
+    <h2 class="slide-title">Nemcsak a szabályozás számít, hanem az urbanizáció iránya is</h2>
+    <div class="divider"></div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot">1</div>
+        <div class="tl-content">
+          <h4>Merre fejlődik a város?</h4>
+          <p>Mely városrészekben nő a lakosság, a fogyasztás és a gazdasági aktivitás 2035-re?</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">2</div>
+        <div class="tl-content">
+          <h4>Hol szorulnak ki az ipari/logisztikai funkciók?</h4>
+          <p>Milyen mértékben váltják ki lakó- és vegyes fejlesztések a korábbi ipari területeket?</p>
+        </div>
+      </div>
+      <div class="tl-item" style="padding-bottom:0">
+        <div class="tl-dot">3</div>
+        <div class="tl-content">
+          <h4>Hogyan változik az áruáramlás iránya?</h4>
+          <p>Mely lokációkból lehet 2035-ben hatékonyan kiszolgálni az új városi súlypontokat?</p>
+        </div>
+      </div>
+    </div>
+    <div class="bp-filter" style="margin-top:20px;background:rgba(232,83,10,0.08);border:1px solid rgba(232,83,10,0.2)">
+      <strong>💡 Üzenet:</strong> A prémium urban logistics lokáció nemcsak a mai Budapesthez, hanem a <strong>2035-ös városszerkezethez</strong> is jól kapcsolódik.
+    </div>
+  </div>
+  <div class="slide-footer"><span>CityOne Logistics Parks — Urban Logistics 2035</span><span>9 / 18</span></div>
+</div>
+
+<!-- SLIDE 10 — TÖBB ELOSZTÓPONT -->
+<div class="slide slide-dark2" id="s10">
+  <div class="slide-inner">
+    <div class="label">Több városi elosztó pont</div>
+    <h2 class="slide-title white">Nemzetközileg közepes-erős, Budapesten <span class="orange">szabályozásfüggő</span></h2>
+    <div class="divider"></div>
+    <div class="two-col">
+      <div>
+        <p style="color:rgba(255,255,255,0.8);font-size:15px;line-height:1.7;margin-bottom:16px;">A szigorúbb városi szabályozás, az alacsony emissziós zónák és a városi áruszállítás menedzsmentje több városi logisztikai csomópont irányába tolhatja a piacot.</p>
+        <div class="quote-box">Több városi elosztó pont akkor alakulhat ki érdemben, ha a szabályozás a tisztább, konszolidáltabb városi áruszállítást ösztönzi.</div>
+      </div>
+      <div>
+        <div class="card" style="margin-bottom:12px;border-color:rgba(220,38,38,0.3);background:rgba(220,38,38,0.08)">
+          <p style="font-size:13px;color:rgba(255,255,255,0.8)"><span style="color:#f87171;font-weight:700;">❌ Nem állítjuk:</span> Microhub-forradalom lesz Budapesten a következő 10 évben.</p>
+        </div>
+        <div class="card" style="border-color:rgba(22,163,74,0.3);background:rgba(22,163,74,0.08)">
+          <p style="font-size:13px;color:rgba(255,255,255,0.8)"><span style="color:#4ade80;font-weight:700;">✓ Állítjuk:</span> A szabályozás változása felértékelheti az urban / inner-ring csomópontokat.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer white"><span>CityOne Logistics Parks — Urban Logistics 2035</span><span>10 / 18</span></div>
+</div>
+
+<!-- SLIDE 11 — ELEKTRIFIKÁCIÓ -->
+<div class="slide slide-light" id="s11">
+  <div class="slide-inner">
+    <div class="label">Elektrifikáció</div>
+    <h2 class="slide-title">Erős nemzetközi trend, de az ütem helyi adottságoktól függ</h2>
+    <div class="divider"></div>
+    <div class="two-col">
+      <div>
+        <h3 class="section-title" style="margin-bottom:14px;">🏢 Ingatlanoldali hatás</h3>
+        <ul class="bullet-list">
+          <li>EV-töltés előkészítése és kiépítése</li>
+          <li>Energiafogyasztás mérése és optimalizálása</li>
+          <li>Esetleges helyi energiatermelés (napelem)</li>
+          <li>Bérlői energiaigények jobb kezelése</li>
+        </ul>
+      </div>
+      <div>
+        <div class="quote-box">
+          Az európai villamos hálózatok kapacitása sok helyen szűk, miközben az energiaigényesebb raktáraknál az energiaellátás kritikusabbá válik.
+          <div class="quote-source">CBRE Research</div>
+        </div>
+        <div class="bp-filter">
+          <strong>🇭🇺 Budapest-szűrő:</strong> A mai áramkapacitás bérlői döntési szempont — de 10 éves távon a hálózatfejlesztés, a szabályozás és az energiatechnológia is változik.
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span>CityOne Logistics Parks — Urban Logistics 2035</span><span>11 / 18</span></div>
+</div>
+
+<!-- SLIDE 12 — AI/TECH -->
+<div class="slide slide-gray" id="s12">
+  <div class="slide-inner">
+    <div class="label">AI, digitalizáció, automatizáció</div>
+    <h2 class="slide-title">Fontos trendek, de nem szabad túlállítani az ingatlanhatást</h2>
+    <div class="divider"></div>
+    <div class="two-col">
+      <div>
+        <div class="card-light card-orange" style="margin-bottom:16px">
+          <h3 class="section-title">🚛 Bérlői oldalon</h3>
+          <ul class="bullet-list" style="margin-top:8px;">
+            <li>AI-alapú útvonaltervezés, flottaoptimalizálás</li>
+            <li>Automatizált belső folyamatok</li>
+            <li>Digitális ellátási láncok</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="card-light" style="border-left:4px solid var(--navy)">
+          <h3 class="section-title">🏢 Tulajdonosi oldalon</h3>
+          <ul class="bullet-list" style="margin-top:8px;">
+            <li>AI-alapú property management</li>
+            <li>Prediktív karbantartás</li>
+            <li>Energiaoptimalizálás, hibadetektálás</li>
+            <li>Üzemeltetési adatok jobb használata</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="bp-filter" style="margin-top:16px">
+      <strong>📊 Kutatói konszenzus:</strong> Az automatizáció és digitalizáció terjed, de nincs erős konszenzus arról, hogy az urban / inner-ring raktárak teljesen <strong>új épülettípussá</strong> válnak.
+    </div>
+  </div>
+  <div class="slide-footer"><span>CityOne Logistics Parks — Urban Logistics 2035</span><span>12 / 18</span></div>
+</div>
+
+<!-- SLIDE 13 — NINCS KONSZENZUS -->
+<div class="slide slide-dark" id="s13">
+  <div class="slide-inner">
+    <div class="label">Miben NINCS erős konszenzus?</div>
+    <h2 class="slide-title white">Ezeket nem szabad <span class="orange">központi tézissé</span> tenni</h2>
+    <div class="divider"></div>
+    <ul class="strike-list" style="columns:2;gap:12px">
+      <li>Humanoid robotok az urban raktárakban</li>
+      <li>Teljesen automatizált urban warehouse-ok</li>
+      <li>Többszintes logisztikai épületek</li>
+      <li>Egységes "ideális" urban warehouse méret</li>
+      <li>Mindenhol elterjedő microhub-modell</li>
+      <li>Radikálisan új raktártípusok</li>
+    </ul>
+    <div class="card" style="margin-top:20px;background:rgba(232,83,10,0.15);border-color:rgba(232,83,10,0.3)">
+      <p style="color:white;font-size:15px;line-height:1.6;"><span class="orange">💡 Üzenet:</span> Ezek lehetnek érdekes forgatókönyvek, de <strong>nem ezekre kell építeni</strong> a fő stratégiát.</p>
+    </div>
+  </div>
+  <div class="slide-footer white"><span>CityOne Logistics Parks — Urban Logistics 2035</span><span>13 / 18</span></div>
+</div>
+
+<!-- SLIDE 14 — MI NEM VÁLTOZIK -->
+<div class="slide slide-light" id="s14">
+  <div class="slide-inner">
+    <div class="label">Mi nem változik?</div>
+    <h2 class="slide-title">A legerősebb befektetői konszenzus: a lokáció továbbra is meghatározó</h2>
+    <div class="divider"></div>
+    <div class="two-col">
+      <div class="change-box change-changes">
+        <h3 class="section-title" style="color:var(--red);margin-bottom:14px;">🔄 Változik</h3>
+        <ul class="bullet-list">
+          <li>Technológia és automatizáció</li>
+          <li>Üzemeltetési modellek</li>
+          <li>Energiahasználat és -ellátás</li>
+          <li>Szabályozási környezet</li>
+          <li>Városszerkezet és áruáramlás</li>
+        </ul>
+      </div>
+      <div class="change-box change-stays">
+        <h3 class="section-title" style="color:var(--green);margin-bottom:14px;">✓ Nem változik</h3>
+        <ul class="bullet-list">
+          <li><strong>A városi hozzáférés értéke</strong></li>
+          <li><strong>A telekszűkösség</strong></li>
+          <li>A jó közlekedési kapcsolatok jelentősége</li>
+          <li>A logisztikai funkció stratégiai szerepe</li>
+        </ul>
+      </div>
+    </div>
+    <div class="quote-box" style="margin-top:16px">
+      A modern, jó lokációjú urban és established logistics hot spot eszközök előnyt élveznek a rugalmasabb kínálatú periférikus piacokkal szemben.
+      <div class="quote-source">CBRE Investment Management</div>
+    </div>
+  </div>
+  <div class="slide-footer"><span>CityOne Logistics Parks — Urban Logistics 2035</span><span>14 / 18</span></div>
+</div>
+
+<!-- SLIDE 15 — PRÉMIUM TÉNYEZŐK -->
+<div class="slide slide-dark2" id="s15">
+  <div class="slide-inner">
+    <div class="label">Mitől lehet prémium egy urban logistics park?</div>
+    <h2 class="slide-title white">A kutatói logika alapján öt tényező számít</h2>
+    <div class="divider"></div>
+    <div class="card-grid card-grid-3" style="gap:12px">
+      <div class="card">
+        <div class="card-num">1</div>
+        <h3 style="font-size:14px;font-weight:700;color:white;margin-bottom:6px;">Nagy fogyasztói tömeg gyors elérése</h3>
+        <p style="font-size:12px;color:rgba(255,255,255,0.6);">Nem a kilométer számít, hanem az elérhető piac.</p>
+      </div>
+      <div class="card">
+        <div class="card-num">2</div>
+        <h3 style="font-size:14px;font-weight:700;color:white;margin-bottom:6px;">Erős közlekedési hálózati kapcsolódás</h3>
+        <p style="font-size:12px;color:rgba(255,255,255,0.6);">Városi utak, gyűrűs kapcsolatok, autópályák, repülőtér.</p>
+      </div>
+      <div class="card">
+        <div class="card-num">3</div>
+        <h3 style="font-size:14px;font-weight:700;color:white;margin-bottom:6px;">Fontos szerep a városi disztribúcióban</h3>
+        <p style="font-size:12px;color:rgba(255,255,255,0.6);">Ha a lokáció kiesik, a bérlői működés érdemben romlik.</p>
+      </div>
+      <div class="card">
+        <div class="card-num">4</div>
+        <h3 style="font-size:14px;font-weight:700;color:white;margin-bottom:6px;">Megőrizhető logisztikai funkció</h3>
+        <p style="font-size:12px;color:rgba(255,255,255,0.6);">Nem szorul ki könnyen lakó- vagy más funkciók miatt.</p>
+      </div>
+      <div class="card" style="border-color:var(--orange);background:rgba(232,83,10,0.15)">
+        <div class="card-num">5</div>
+        <h3 style="font-size:14px;font-weight:700;color:white;margin-bottom:6px;">Jó pozíció a 2035-ös városhoz</h3>
+        <p style="font-size:12px;color:rgba(255,255,255,0.6);">Nemcsak a mai, hanem a jövőbeli városszerkezethez kell kapcsolódni.</p>
+      </div>
+      <div class="card" style="display:flex;align-items:center;justify-content:center;background:rgba(232,83,10,0.08)">
+        <p style="font-size:28px;text-align:center;">🏆</p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer white"><span>CityOne Logistics Parks — Urban Logistics 2035</span><span>15 / 18</span></div>
+</div>
+
+<!-- SLIDE 16 — BUDAPEST MÁTRIX -->
+<div class="slide slide-light" id="s16">
+  <div class="slide-inner">
+    <div class="label">Mit jelent mindez Budapest számára?</div>
+    <h2 class="slide-title">Erős, közepes és gyenge állítások</h2>
+    <div class="divider"></div>
+    <div class="matrix">
+      <div class="matrix-header">
+        <div><span class="dot dot-green"></span>Erősen releváns</div>
+        <div><span class="dot dot-amber"></span>Szabályozásfüggő</div>
+        <div><span class="dot dot-red"></span>Gyengébb tézis</div>
+      </div>
+      <div class="matrix-row">
+        <div class="matrix-cell cell-green">Városi áruszállítás növekedése</div>
+        <div class="matrix-cell cell-amber">Több városi elosztó pont</div>
+        <div class="matrix-cell cell-red">Többszintes urban warehouse</div>
+      </div>
+      <div class="matrix-row">
+        <div class="matrix-cell cell-green">Urban/inner-ring lokációk szűkössége</div>
+        <div class="matrix-cell cell-amber">Microhubok szerepe</div>
+        <div class="matrix-cell cell-red">Teljesen automatizált városi raktárak</div>
+      </div>
+      <div class="matrix-row">
+        <div class="matrix-cell cell-green">Alternatív hasznosítási nyomás</div>
+        <div class="matrix-cell cell-amber">Alacsony emissziós zónák hatása</div>
+        <div class="matrix-cell cell-red">Egyetlen optimális raktárméret</div>
+      </div>
+      <div class="matrix-row">
+        <div class="matrix-cell cell-green">Modern és gyengébb állomány szétválása</div>
+        <div class="matrix-cell cell-amber"></div>
+        <div class="matrix-cell cell-red"></div>
+      </div>
+      <div class="matrix-row">
+        <div class="matrix-cell cell-green">Elektrifikáció fokozatos térnyerése</div>
+        <div class="matrix-cell cell-amber"></div>
+        <div class="matrix-cell cell-red"></div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span>CityOne Logistics Parks — Urban Logistics 2035</span><span>16 / 18</span></div>
+</div>
+
+<!-- SLIDE 17 — CITYONE KÉRDÉSEK -->
+<div class="slide slide-gray" id="s17">
+  <div class="slide-inner">
+    <div class="label">Mit jelent mindez a CityOne számára?</div>
+    <h2 class="slide-title">A következő évek fő landlord-kérdései</h2>
+    <div class="divider"></div>
+    <div class="card-grid" style="gap:12px">
+      <div class="card-light card-orange">
+        <div style="display:flex;align-items:flex-start;gap:12px">
+          <div class="card-num" style="margin:0;flex-shrink:0">1</div>
+          <div><h3 style="font-size:15px;font-weight:700;margin-bottom:4px;">Hol érdemes további urban/inner-ring lokációkat keresni?</h3><p style="font-size:13px;color:var(--muted)">Nem csak mai elérés alapján, hanem a város jövőbeli fejlődési irányai szerint.</p></div>
+        </div>
+      </div>
+      <div class="card-light">
+        <div style="display:flex;align-items:flex-start;gap:12px">
+          <div class="card-num" style="margin:0;flex-shrink:0;background:var(--navy)">2</div>
+          <div><h3 style="font-size:15px;font-weight:700;margin-bottom:4px;">Mely lokációk őrizhetik meg logisztikai szerepüket?</h3><p style="font-size:13px;color:var(--muted)">A logisztikai funkció védhetősége kulcskérdés.</p></div>
+        </div>
+      </div>
+      <div class="card-light">
+        <div style="display:flex;align-items:flex-start;gap:12px">
+          <div class="card-num" style="margin:0;flex-shrink:0;background:var(--amber)">3</div>
+          <div><h3 style="font-size:15px;font-weight:700;margin-bottom:4px;">Hol nőhet az alternatív hasznosítási nyomás?</h3><p style="font-size:13px;color:var(--muted)">Ez lehetőség és kockázat egyszerre.</p></div>
+        </div>
+      </div>
+      <div class="card-light">
+        <div style="display:flex;align-items:flex-start;gap:12px">
+          <div class="card-num" style="margin:0;flex-shrink:0;background:var(--navy)">4</div>
+          <div><h3 style="font-size:15px;font-weight:700;margin-bottom:4px;">Mely eszközök érdemelnek modernizációs capexet?</h3><p style="font-size:13px;color:var(--muted)">Energia, digitális üzemeltetés, bérlői működés támogatása.</p></div>
+        </div>
+      </div>
+      <div class="card-light card-orange">
+        <div style="display:flex;align-items:flex-start;gap:12px">
+          <div class="card-num" style="margin:0;flex-shrink:0">5</div>
+          <div><h3 style="font-size:15px;font-weight:700;margin-bottom:4px;">Hogyan használjuk az AI-t landlord oldalon?</h3><p style="font-size:13px;color:var(--muted)">Property management, karbantartás, energia, monitoring.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span>CityOne Logistics Parks — Urban Logistics 2035</span><span>17 / 18</span></div>
+</div>
+
+<!-- SLIDE 18 — ZÁRÓ -->
+<div class="slide hero-bg" id="s18">
+  <div class="slide-inner">
+    <div class="label">Záró gondolat</div>
+    <h2 class="slide-title white">A kutatóházi konszenzus lényege</h2>
+    <div class="divider"></div>
+    <div class="card-grid card-grid-3" style="margin-bottom:24px">
+      <div class="card"><div style="font-size:22px;margin-bottom:8px">📦</div><p style="font-size:13px;color:rgba(255,255,255,0.8)">Városi áruszállítás és e-commerce növekedése</p></div>
+      <div class="card"><div style="font-size:22px;margin-bottom:8px">🔒</div><p style="font-size:13px;color:rgba(255,255,255,0.8)">Urban/inner-ring lokációk kínálati korlátai</p></div>
+      <div class="card"><div style="font-size:22px;margin-bottom:8px">📜</div><p style="font-size:13px;color:rgba(255,255,255,0.8)">Aktívabb városi szabályozás</p></div>
+      <div class="card"><div style="font-size:22px;margin-bottom:8px">⚡</div><p style="font-size:13px;color:rgba(255,255,255,0.8)">Elektrifikáció és energiatudatosság</p></div>
+      <div class="card"><div style="font-size:22px;margin-bottom:8px">🤖</div><p style="font-size:13px;color:rgba(255,255,255,0.8)">AI és digitalizáció által javuló működés</p></div>
+      <div class="card"><div style="font-size:22px;margin-bottom:8px">🏙️</div><p style="font-size:13px;color:rgba(255,255,255,0.8)">Városszerkezet átalakulása</p></div>
+    </div>
+    <div style="background:rgba(232,83,10,0.15);border:1px solid rgba(232,83,10,0.35);border-radius:12px;padding:20px 24px">
+      <p style="font-size:16px;color:white;line-height:1.7;"><span class="orange">🎯 Budapest szempontjából a kulcskérdés:</span> Mely urban / inner-ring lokációk maradnak logisztikailag relevánsak akkor is, amikor a város fejlődési irányai, a lakófejlesztések és a szabályozás átrendezik a városi áruáramlást.</p>
+    </div>
+    <p style="color:rgba(255,255,255,0.4);font-size:13px;margin-top:20px;text-align:center;">CityOne Logistics Parks · BudafokOne · ÚjbudaOne · KőbányaOne</p>
+  </div>
+  <div class="slide-footer white"><span>CityOne Logistics Parks — Urban Logistics 2035</span><span>18 / 18</span></div>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  let current = 0;
+
+  function updateCounter() {
+    document.getElementById('counter').textContent = (current + 1) + ' / ' + slides.length;
+  }
+
+  function goTo(n) {
+    current = Math.max(0, Math.min(slides.length - 1, n));
+    slides[current].scrollIntoView({ behavior: 'smooth', block: 'start' });
+    updateCounter();
+  }
+
+  function nextSlide() { goTo(current + 1); }
+  function prevSlide() { goTo(current - 1); }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') nextSlide();
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') prevSlide();
+  });
+
+  // Update counter on scroll
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        current = Array.from(slides).indexOf(entry.target);
+        updateCounter();
+      }
+    });
+  }, { threshold: 0.5 });
+  slides.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
